@@ -28,7 +28,32 @@ Please follow the below steps to export the project into executable JAR files. T
 
 All the complied JAVA files will be avaiable in the bin folder that gets generated.
 
-The users and groups are loaded into a SAP HANA database. Any database can be used to stored the data. We need to use the respective jdbc JAR files for the program to work.
+The program connects to SAP HANA database which get the list of report Id's that needs to be refreshed for monitoring purposes.
+create a table as below script in SAP HANA database.
+
+create table bobj_rpt_monitoring
+(
+report_id string,
+prompt_type string,
+prompt_type_text
+)
+
+The report id can be obtained from CMC.The prompt type string should be either 1 or 2. 1 indicates No Prompt and 2 indicates One prompt.
+
+Sample Output from the file
+==============================
+REPORT_ID;PROMPT_TYPE;PROMPT_TYPE_TEXT
+4434085;1;No Prompt
+7735086;1;No Prompt
+4545033;1;No Prompt
+4776843;2;One Prompt
+4776978;1;No Prompt
+6840881;1;No Prompt
+6841078;1;No Prompt
+4434207;1;No Prompt
+4434092;2;One Prompt
+4333160;1;No Prompt
+4433930;2;One Prompt
 
 The java program can be executed by running the shell script from the config files folder (BOBJReportRefresh.sh). Please modify the shell sript to add the path of the JAR files and BOBJReportRefreshDetails.properties properties file.
 
