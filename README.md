@@ -1,4 +1,4 @@
-This project is to get the refresh the BOBJ report for monitoring purposes from SAP BOBJ CMC Server. The Java Project uses SAP BOBJ REST API's and connects to CMC Server and pull the users and groups created in the BOBJ Server. We need to do some initial setup to run this Java project.
+This project is to get the refresh the BOBJ report for monitoring purposes from SAP BOBJ CMC Server. The Java Project uses SAP BOBJ REST API's and connects to CMC Server and logs into the BOBJ server and refreshes the report.This project was created mainly to monitor the reprots every half an hour to make sure there are no errors or performance issues in the database or in the BOBJ server. The backend database for the reports uses SAP HANA. We need to do some initial setup to run this Java project.
 
 Please read the following REST API documents to refresh the reports with prompts and without prompts
 
