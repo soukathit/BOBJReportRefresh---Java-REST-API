@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><error>
+    <error_code>WSR 00102</error_code>
+    <message>Illegal argument ("An internal error occurred while calling 'processDPCommandsEx' API. (Error: ERR_WIS_30270)")</message>
+</error>

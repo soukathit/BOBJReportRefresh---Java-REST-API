@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><parameters>
+    <parameter dpId="DP0" optional="false" type="prompt">
+        <id>0</id>
+        <technicalName>psHana Variable EDW.0CD_NON-CONFORM/VDIM_DRM_ALL_TERRITORY/IP_TERRITORY_TYPE</technicalName>
+        <name>Territory Type</name>
+        <answer constrained="false" keyType="Text" type="Text">
+            <info cardinality="Single" keepLastValues="true">
+                <lov hierarchical="false" refreshable="true">
+                    <id>UNIVERSELOV_DS0.:M:STR:EDW.0CD_NON-CONFORM/VDIM_DRM_ALL_TERRITORY/IP_TERRITORY_TYPE</id>
+                </lov>
+                <values>
+                    <value>Field-Sales</value>
+                </values>
+                <previous>
+                    <value>Field-Sales</value>
+                </previous>
+            </info>
+            <values>
+                <value>Field-Sales</value>
+            </values>
+        </answer>
+    </parameter>
+</parameters>

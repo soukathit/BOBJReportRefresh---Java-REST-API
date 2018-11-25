@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><attrs xmlns="http://www.sap.com/rws/bip"><attr name="password" type="string">XXXXX</attr><attr name="clientType" type="string"/><attr name="auth" possibilities="secEnterprise,secLDAP,secWinAD,secSAPR3" type="string">secEnterprise</attr><attr name="userName" type="string">XXXX</attr></attrs>
