@@ -1,0 +1,197 @@
+package com.tutorialspot.demo.hr.model;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.crystaldecisions.sdk.framework.CrystalEnterprise;
+import com.crystaldecisions.sdk.framework.IEnterpriseSession;
+import com.crystaldecisions.sdk.occa.infostore.IInfoObject;
+import com.crystaldecisions.sdk.occa.infostore.IInfoObjects;
+import com.crystaldecisions.sdk.occa.infostore.IInfoStore;
+import com.crystaldecisions.sdk.occa.pluginmgr.IPluginInfo;
+import com.crystaldecisions.sdk.plugin.desktop.user.IUser;
+import com.crystaldecisions.sdk.plugin.desktop.usergroup.IUserGroup;
+import com.crystaldecisions.sdk.properties.IProperties;
+import com.crystaldecisions.sdk.properties.IProperty;
+import com.sap.sl.sdk.authoring.samples.util.AuthenticationMode;
+import com.sap.sl.sdk.framework.SlContext;
+import com.sap.sl.sdk.framework.cms.CmsSessionService;
+
+public class AddUsersToBOBJGroup_New {
+
+	private static final String CMS_LOG_HOST = "XXXXXXXXXX";
+	
+	private final String USER_AGENT = "Mozilla/5.0";
+
+	/** User name used to log in to the CMS */
+	private static final String CMS_LOG_USER = "XXXXXXXX";
+
+	/** User Password */
+    private static final String CMS_LOG_PASS = "XXXXXXXXXXXX";
+
+	/** Authentication mode used to log in to the CMS. Here: Enterprise */
+    private static final String CMS_AUTH_MODE = AuthenticationMode.ENTERPRISE;
+    
+    /** Full path of the connection in the CMS repository */
+    //private static final String CNX_PATH = CmsResourceService.CONNECTIONS_ROOT + "/BO to Greenplum (JDBC)";
+    
+    /** Full path of the connection in the CMS repository */
+    //private static final String UNX_PATH = CmsResourceService.UNIVERSES_ROOT + "/Backup/ByWeek";
+    
+    /** Universe name */
+    private static final String UNX_NAME = "XXXXXXXXXXXXXXXXX";
+    
+    String dbName = "XXXXXXXXXXXXXXXXXXXXX";
+    
+    String userName = "XXXXXXXXXXXXX";
+    
+    String password = "XXXXXXXXXXXXXXXXXXX";
+    
+    List<Object> listFolder = new ArrayList<Object>();
+    List<Object> listDimension = new ArrayList<Object>();
+    List<Object> listAttribute = new ArrayList<Object>();
+    List<Object> listMeasure = new ArrayList<Object>();
+    List<Object> listFilter = new ArrayList<Object>();
+	
+	/** Local folder used to save all resources locally */
+    //private static final String LOCAL_FOLDER = System.getProperty("java.io.tmpdir");
+    private static final String LOCAL_FOLDER = "XXXXXXXXXXXXXXXXXXXXX";
+    
+    Connection connection = null;
+    //Statement stmt ;
+    String myname = "XXXXXXXXXXXXXXXXXXX";
+    String mypassword = "XXXXXXXX";
+    
+    String Universe_Name = UNX_NAME;
+	/** New user name to set in the connection */
+    //private static final String NEW_USER = "gp_rpt";
+
+	/** New password to set in the connection */
+    //private static final String NEW_PASS = "gp_rpt";
+
+    private SlContext context;
+    
+    private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    Date date = new Date();
+    String current_Date_parameter = sdf.format(date);
+    //private IEnterpriseSession enterpriseSession;
+    
+    @Before
+    public void setUp() throws Exception {
+
+    	System.out.println("LOCAL_FOLDER : " + LOCAL_FOLDER);
+		// Connects to the CMS and creates a session
+    	System.out.println("@ Before Execution");
+        context = SlContext.create();
+        System.out.println("@ Before Execution - Context Creation");
+
+    }
+    
+
+    @After
+    public void tearDown() throws Exception {
+
+    	System.out.println("@ After Execution");
+		// Closes the CMS session
+        context.close();
+        System.out.println("@ After Execution -  Context Close and Program Ended Successfully");
+        //enterpriseSession.logoff();
+
+    }
+    
+    @Test
+    public void FetchFolders() throws Exception {
+    
+    	 try {                  
+	    	  
+	         connection = DriverManager.getConnection(
+	            "jdbc:sap://XXXXXXXXXXXXXXX:30015/?autocommit=false",myname,mypassword);
+	         System.out.println("SAP HANA DB Connected Successfully");
+	      } catch (SQLException e) {
+	         System.err.println("Connection Failed. User/Passwd Error?");
+	         return;
+	      }
+    	 if (connection != null) {
+	        
+	            System.out.println("Connection to HANA successful!");
+	            Statement stmt= connection.createStatement();
+	            ResultSet resultSet = stmt.executeQuery("Select 'hello world' from dummy");
+	            resultSet.next();
+	            String hello = resultSet.getString(1);
+	            System.out.println(hello);
+	      
+	     }
+     Statement stmt= connection.createStatement();
+     String SQL_INSERT_BOBJ_USERS = "INSERT INTO DSD_BI_INFO.BOBJ_USERS" + " VALUES(?, ?, ?,?,?,?)";
+     String SQL_INSERT_BOBJ_ROLES = "INSERT INTO DSD_BI_INFO.BOBJ_ROLES" + " VALUES(?, ?, ?,?,?)";
+     String SQL_INSERT_BOBJ_USER_ROLES = "INSERT INTO DSD_BI_INFO.BOBJ_USER_ROLES" + " VALUES(?, ?,?,?)";
+     String SQL_SELECT_BOBJ_SECURITY_TABLE ="select distinct user_name from  BOBJ_SECURITY_TABLE b where active_flag ='Y'  and dw_load_date > (select DW_MAX_ETL_DATE from BOBJ_SECURITY_TABLE_ETL_STATUS)";
+     String SQL_UPDATE_BOBJ_SECURTY_TBL_ETL_DATE ="UPDATE BOBJ_SECURITY_TABLE_ETL_STATUS set DW_MAX_ETL_DATE= current_date ";
+     String SQL_HANA_SELECT_BOBJ_SECURITY_TABLE="SELECT distinct user_name FROM VSSERVICE.VTB_SELF_SERVICE WHERE METRIC_GROUP LIKE '%Dell%' and active_flag ='Y' and logged_date > (select LOAD_DATE from VSSERVICE.VTB_SS_LOADDATE)";
+     String SQL_HANA_UPDATE_BOBJ_SECURTY_TBL_ETL_DATE ="UPDATE VSSERVICE.VTB_SS_LOADDATE set LOAD_DATE= current_date ";
+
+  	
+  	ResultSet rows = stmt.executeQuery(SQL_HANA_SELECT_BOBJ_SECURITY_TABLE);
+
+        
+  	String bipURL = "http://sbo-dev2-a1.vmware.com:6405/biprws";
+	String CMServerURL = "http://sbo-dev2-a1.vmware.com:6405";
+    String documentId = "190149";
+    String CMSUser = "mohammedsoukat";
+    String CMSPassword = "Welcome.1";
+    String CMSAuthType = "secEnterprise";
+    IEnterpriseSession enterpriseSession = CrystalEnterprise.getSessionMgr().logon(CMS_LOG_USER, CMS_LOG_PASS, CMS_LOG_HOST, CMS_AUTH_MODE);
+    context.getService(CmsSessionService.class).setSession(enterpriseSession);
+    IInfoStore infoStore = (IInfoStore) enterpriseSession.getService("InfoStore");
+    IInfoObjects boInfoGroupObjects = null;	
+    IInfoObjects boUserObjects = null;
+    //IUser boUser;
+    Integer bouserid;
+    IPluginInfo newBoUserPlugin = infoStore.getPluginMgr().getPluginInfo("CrystalEnterprise.User"); 
+    IInfoObjects userList = infoStore.newInfoObjectCollection(); 
+    IUser newBOUser = (IUser)userList.add(newBoUserPlugin); 
+    boInfoGroupObjects = infoStore.query("SELECT * FROM CI_SYSTEMOBJECTS WHERE SI_PROGID='CrystalEnterprise.USERGROUP' AND SI_NAME in('ZEDW_UFS_DELL_ATTRIBUTES')");
+    //System.out.println("boInfoGroupObjects Size: " + boInfoGroupObjects.size());
+    //boUserObjects = infoStore.query("SELECT * FROM CI_SYSTEMOBJECTS WHERE SI_PROGID='CrystalEnterprise.USER' AND SI_NAME in('mohammedsoukat')");
+    IInfoObject iObject = null;
+    int count=0;
+    while (rows.next()) {
+    	count+=1;
+    	String user_name =  rows.getString("user_name");
+    	System.out.println("User Name is: " + user_name);
+    	boUserObjects = infoStore.query("Select TOP 100000 SI_ID,SI_NAME, SI_USERFULLNAME, SI_ID, SI_NAMEDUSER, SI_LASTLOGONTIME, SI_DESCRIPTION, SI_ALIASES, SI_EMAIL_ADDRESS From CI_SYSTEMOBJECTS Where SI_KIND='User' and SI_NAME ='" + user_name + "'");
+    	//System.out.println("BO User Objects Query: " +  "SELECT TOP 10000 SI_NAME ,SI_ID FROM CI_SYSTEMOBJECTS WHERE SI_KIND='User' AND SI_NAME ='" + user_name + "'");
+    	System.out.println("BO User Objects Size : " +  boUserObjects.size());
+    	for(int boUserIterator =0; boUserIterator < boUserObjects.size(); boUserIterator++){
+    		iObject = (IInfoObject)boUserObjects.get(boUserIterator);
+    		 IProperties prop = iObject.properties();
+        	  bouserid = iObject.getID();
+        	 IProperty bousername = prop.getProperty("SI_NAME");    		
+    	System.out.println("The User ID for "+  user_name + " in CMC is : " + bouserid);
+    	IUserGroup boGroup = (IUserGroup)boInfoGroupObjects.get(0);
+        boGroup.getUsers().add(new Integer(bouserid));
+        infoStore.commit(boInfoGroupObjects); 
+    	}
+    	}
+    stmt.executeUpdate(SQL_HANA_UPDATE_BOBJ_SECURTY_TBL_ETL_DATE);
+   
+    }
+   
+
+}
+
