@@ -6,6 +6,11 @@ https://help.sap.com/viewer/58f583a7643e48cf944cf554eb961f5b/4.2/en-US/7da0fc626
 
 https://help.sap.com/viewer/58f583a7643e48cf944cf554eb961f5b/4.2/en-US/07a0889d23294a449050b2c11420376d.html
 
+All the required External JAR files needs to be added in the Configure Build Path in Eclipse.
+
+1. C:\Program Files (x86)\SAP BusinessObjects\SAP BusinessObjects Enterprise XI 4.0\java\lib
+2. C:\Program Files (x86)\SAP BusinessObjects\SAP BusinessObjects Enterprise XI 4.0\SL SDK\java
+
 If we need to refresh the reprot with prompts, we need to provide the prompt values in a XML file which the java program takes as input. The sample XML files are available in the config_files folder. The condif_files folder stores the logon_request.xml & logon_response.xml files that gets generated from REST API. The path of the config folder needs to be updated in the BOBJReportRefreshDetails.properties properties file (resourcesFolderField=/path/to/BOBJRefreshDetails)
 
 Follow the configurations as mentioned in the URL in Eclipse.
